@@ -39,14 +39,14 @@ def softmax_loss_naive(W, X, y, reg):
     loss_i = -score[y[i]] + np.log(denom)
     loss += loss_i
     for j in xrange(num_classes):
-        dW[:,j] = X[i,:] * (np.exp(score[j])) / denom
-        if j = y[i]:
-            dW[;,j] -= X[i]
+        dW[:,j] += X[i,:] * (np.exp(score[j])) / denom
+        if j == y[i]:
+            dW[:,j] -= X[i]
     
-    loss /= num_train
-    dW /= num_train
-    loss += reg*np.sum(W*W)
-    dW += 2*reg*W
+  loss /= num_train
+  dW /= num_train
+  loss += reg*np.sum(W*W)
+  dW += 2*reg*W
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
@@ -73,7 +73,7 @@ def softmax_loss_vectorized(W, X, y, reg):
   num_train = X.shape[0]
   num_classes = W.shape[1]
   score = np.dot(X,W)
-  score -= np.expand_dims(np.amax(score,1))
+  score -= np.expand_dims(np.amax(score,1),1)
   score_exp = np.exp(score)
   score_sum = np.sum(score_exp, 1)
   right_score = score_exp[range(num_train),y]
